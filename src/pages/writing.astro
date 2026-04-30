@@ -4,24 +4,19 @@ import PublicationCard from '../components/PublicationCard.astro';
 import { t } from '../i18n';
 import { publications } from '../data/publications';
 
-const lang = 'en' as const;
+const lang = 'ja' as const;
 const tt = t[lang];
 const list = publications[lang];
 ---
 
-<BaseLayout title={`${tt.writingTitle} — Yuto Mitomi`} lang={lang}>
+<BaseLayout title={`${tt.writingTitle} — 三富 佑人`} lang={lang}>
   <h1 class="text-2xl font-semibold mb-2">{tt.writingTitle}</h1>
   <p class="text-muted text-sm mb-10">
-    {tt.writingIntro}{' '}
-    <a href="https://zenn.dev/techliberty" class="text-accent underline underline-offset-2">
-      Zenn
-    </a>
-    {' '}and
-    {' '}
-    <a href="https://buildersbox.corp-sansan.com/" class="text-accent underline underline-offset-2">
-      Sansan Builders Box
-    </a>
-    .
+    主に
+    <a href="https://zenn.dev/techliberty" class="text-accent underline underline-offset-2">Zenn</a>
+    と
+    <a href="https://buildersbox.corp-sansan.com/" class="text-accent underline underline-offset-2">Sansan Builders Box</a>
+    に投稿した技術記事・論文解説。
   </p>
   <div class="space-y-4">
     {list.map((p) => <div data-reveal><PublicationCard pub={p} /></div>)}

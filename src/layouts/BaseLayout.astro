@@ -9,7 +9,7 @@ interface Props {
   lang?: Lang;
 }
 
-const { title, description, lang = 'en' } = Astro.props;
+const { title, description, lang = 'ja' } = Astro.props;
 const tt = t[lang];
 const defaultTitle = lang === 'ja' ? '三富 佑人' : 'Yuto Mitomi';
 const defaultDesc =

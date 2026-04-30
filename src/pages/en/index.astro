@@ -11,11 +11,11 @@ import { t, navHref } from '../../i18n';
 import { publications } from '../../data/publications';
 import { projects } from '../../data/projects';
 
-const lang = 'ja' as const;
+const lang = 'en' as const;
 const tt = t[lang];
 
 const experiences = (await getCollection('experience'))
-  .filter((e) => e.slug.startsWith('ja/'))
+  .filter((e) => e.slug.startsWith('en/'))
   .sort((a, b) => a.data.order - b.data.order);
 ---
 

@@ -104,16 +104,16 @@ export const t = {
 /** Build the alternate-locale path for the current pathname. */
 export function altLangPath(pathname: string, currentLang: Lang): string {
   const clean = pathname.replace(/\/$/, '') || '/';
-  if (currentLang === 'en') {
-    return clean === '/' ? '/ja/' : `/ja${clean}/`;
+  if (currentLang === 'ja') {
+    return clean === '/' ? '/en/' : `/en${clean}/`;
   }
-  // currentLang === 'ja'
-  if (clean === '/ja') return '/';
-  return clean.replace(/^\/ja/, '') + '/';
+  // currentLang === 'en'
+  if (clean === '/en') return '/';
+  return clean.replace(/^\/en/, '') + '/';
 }
 
 export function navHref(lang: Lang, key: 'overview' | 'writing'): string {
-  const base = lang === 'ja' ? '/ja' : '';
+  const base = lang === 'en' ? '/en' : '';
   if (key === 'overview') return `${base}/`;
   return `${base}/writing/`;
 }
