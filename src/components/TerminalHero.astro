@@ -124,6 +124,19 @@ const hint = lang === 'ja' ? "'help' と入力してコマンド一覧を表示"
       output.appendChild(div);
     };
 
+    const catArt = String.raw`        ,__,    ,__,
+         \  \__/  /
+         /        \
+        |  O    O  |
+        |    /\    |
+     ___|    vv    |___
+         \   __   /
+          \_/  \_/
+          /      \
+         / ~~~~~~ \
+        ( ~~~~~~~~ )
+         \________/`;
+
     const commands = {
       help() {
         return [
@@ -138,6 +151,7 @@ const hint = lang === 'ja' ? "'help' と入力してコマンド一覧を表示"
           '  lang <ja|en>      switch language',
           '  echo <text>       print text',
           '  date              print current date',
+          '  meow              print a cat',
           '  clear             clear the terminal',
           '',
           'tip: press Tab to autocomplete commands and arguments.',
@@ -197,6 +211,9 @@ const hint = lang === 'ja' ? "'help' と入力してコマンド一覧を表示"
       },
       date() {
         return new Date().toString();
+      },
+      meow() {
+        return catArt;
       },
       clear() {
         output.innerHTML = initialHTML;
