@@ -3,6 +3,7 @@ import { t, type Lang } from '../i18n';
 interface Props { lang: Lang; }
 const { lang } = Astro.props;
 const h = t[lang].hero;
+const bio = t[lang].bio;
 
 const contacts = [
   {
@@ -31,10 +32,13 @@ const contacts = [
     href: 'https://drive.google.com/file/d/1CLe6qvLuT17xtVMWkgq-Rw-C004OXRfY/view',
   },
 ];
+
+const sections = ['education', 'work', 'skills', 'publications', 'projects', 'writing'];
+const hint = lang === 'ja' ? "ヒント: 'help' と入力してコマンド一覧を表示" : "hint: type 'help' to see available commands";
 ---
 
 <section class="font-mono text-sm md:text-base leading-relaxed" data-reveal>
-  <div class="border border-border rounded-md bg-black/40 overflow-hidden">
+  <div id="terminal-body" class="border border-border rounded-md bg-black/40 overflow-hidden cursor-text">
     <div class="flex gap-1.5 px-4 py-2 border-b border-border">
       <span class="w-3 h-3 rounded-full bg-red-400/60"></span>
       <span class="w-3 h-3 rounded-full bg-yellow-400/60"></span>
@@ -42,35 +46,205 @@ const contacts = [
       <span class="ml-2 text-xs text-muted">~ — zsh</span>
     </div>
     <div class="px-5 py-5 space-y-1">
-      <div>
-        <span class="text-accent">$</span> <span class="text-fg">{h.cmds[0]}</span>
-      </div>
-      <div class="text-fg/85 pl-4">{h.title}</div>
+      <div id="terminal-output" class="space-y-1">
+        <div>
+          <span class="text-accent">$</span> <span class="text-fg">{h.cmds[0]}</span>
+        </div>
+        <div class="text-fg/85 pl-4">{h.title}</div>
 
-      <div>
-        <span class="text-accent">$</span> <span class="text-fg">{h.cmds[1]}</span>
-      </div>
-      <div class="pl-4">
-        {
-          contacts.map((c) => (
-            <div class="flex gap-3">
-              <span class="text-muted shrink-0 w-20">{c.label}</span>
-              <a
-                href={c.href}
-                target={c.href.startsWith('mailto:') ? undefined : '_blank'}
-                rel={c.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
-                class="text-fg hover:text-accent underline underline-offset-2 truncate"
-              >
-                {c.value}{c.href.startsWith('http') ? ' ↗' : ''}
-              </a>
-            </div>
-          ))
-        }
+        <div>
+          <span class="text-accent">$</span> <span class="text-fg">{h.cmds[1]}</span>
+        </div>
+        <div class="pl-4">
+          {
+            contacts.map((c) => (
+              <div class="flex gap-3">
+                <span class="text-muted shrink-0 w-20">{c.label}</span>
+                <a
+                  href={c.href}
+                  target={c.href.startsWith('mailto:') ? undefined : '_blank'}
+                  rel={c.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+                  class="text-fg hover:text-accent underline underline-offset-2 truncate"
+                >
+                  {c.value}{c.href.startsWith('http') ? ' ↗' : ''}
+                </a>
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="text-muted text-xs pt-2">{hint}</div>
       </div>
 
-      <div>
-        <span class="text-accent">$</span> <span class="cursor"></span>
-      </div>
+      <form id="terminal-form" autocomplete="off" class="flex items-center gap-2">
+        <span class="text-accent shrink-0">$</span>
+        <input
+          id="terminal-input"
+          type="text"
+          spellcheck="false"
+          autocapitalize="off"
+          autocorrect="off"
+          aria-label="terminal input"
+          class="flex-1 bg-transparent text-fg outline-none border-none font-mono caret-accent"
+        />
+      </form>
+      <noscript>
+        <div><span class="text-accent">$</span> <span class="cursor"></span></div>
+      </noscript>
     </div>
   </div>
 </section>
+
+<script define:vars={{ contacts, bio, heroTitle: h.title, sections, lang }}>
+  const output = document.getElementById('terminal-output');
+  const input = document.getElementById('terminal-input');
+  const form = document.getElementById('terminal-form');
+  const terminal = document.getElementById('terminal-body');
+  if (output && input && form && terminal) {
+    const history = [];
+    let historyIndex = 0;
+
+    const escapeHtml = (s) =>
+      String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+    const print = (text, cls = 'pl-4 text-fg/85') => {
+      const lines = String(text).split('\n');
+      for (const line of lines) {
+        const div = document.createElement('div');
+        div.className = cls + ' whitespace-pre-wrap break-words';
+        div.textContent = line;
+        output.appendChild(div);
+      }
+    };
+
+    const printPrompt = (cmd) => {
+      const div = document.createElement('div');
+      div.innerHTML = `<span class="text-accent">$</span> <span class="text-fg">${escapeHtml(cmd)}</span>`;
+      output.appendChild(div);
+    };
+
+    const commands = {
+      help() {
+        return [
+          'available commands:',
+          '  help              show this message',
+          '  ls                list page sections',
+          '  cd <section>      jump to a section (e.g. cd writing, cd skills)',
+          '  open <name>       open a contact link (github, linkedin, zenn, email, resume)',
+          '  whoami            print name',
+          '  cat about.txt     print bio',
+          '  lang <ja|en>      switch language',
+          '  echo <text>       print text',
+          '  date              print current date',
+          '  clear             clear the terminal',
+        ].join('\n');
+      },
+      ls() {
+        return sections.join('  ');
+      },
+      cd(args) {
+        const target = (args[0] || '').replace(/^\/+|\/+$/g, '');
+        if (!target || target === '~') {
+          location.href = lang === 'ja' ? '/ja/' : '/';
+          return null;
+        }
+        if (target === 'writing') {
+          location.href = lang === 'ja' ? '/ja/writing/' : '/writing/';
+          return null;
+        }
+        if (sections.includes(target)) {
+          const el = document.getElementById(target);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return null;
+          }
+        }
+        return `cd: no such section: ${target}`;
+      },
+      open(args) {
+        const name = args[0];
+        if (!name) return `usage: open <${contacts.map((c) => c.label).join('|')}>`;
+        const c = contacts.find((c) => c.label === name);
+        if (!c) return `open: not found: ${name}\navailable: ${contacts.map((c) => c.label).join(', ')}`;
+        const isMail = c.href.startsWith('mailto:');
+        window.open(c.href, isMail ? '_self' : '_blank', isMail ? '' : 'noopener,noreferrer');
+        return `opening ${c.label}...`;
+      },
+      whoami() {
+        return heroTitle;
+      },
+      cat(args) {
+        const file = args[0];
+        if (file === 'about.txt') return bio.join('\n\n');
+        if (!file) return 'usage: cat <file>';
+        return `cat: ${file}: No such file or directory`;
+      },
+      lang(args) {
+        const target = args[0];
+        if (target === 'ja') { location.href = '/ja/'; return null; }
+        if (target === 'en') { location.href = '/'; return null; }
+        return 'usage: lang <ja|en>';
+      },
+      echo(args) {
+        return args.join(' ');
+      },
+      date() {
+        return new Date().toString();
+      },
+      clear() {
+        output.innerHTML = '';
+        return null;
+      },
+    };
+
+    const run = (raw) => {
+      const line = raw.trim();
+      if (!line) return;
+      history.push(line);
+      historyIndex = history.length;
+      printPrompt(line);
+      const parts = line.split(/\s+/);
+      const cmd = parts[0];
+      const args = parts.slice(1);
+      const fn = commands[cmd];
+      const result = fn ? fn(args) : `${cmd}: command not found. type 'help' for available commands.`;
+      if (result != null) print(result);
+      requestAnimationFrame(() => input.scrollIntoView({ block: 'nearest' }));
+    };
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      run(input.value);
+      input.value = '';
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (historyIndex > 0) {
+          historyIndex--;
+          input.value = history[historyIndex];
+        }
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (historyIndex < history.length - 1) {
+          historyIndex++;
+          input.value = history[historyIndex];
+        } else {
+          historyIndex = history.length;
+          input.value = '';
+        }
+      } else if (e.key === 'l' && e.ctrlKey) {
+        e.preventDefault();
+        output.innerHTML = '';
+      }
+    });
+
+    terminal.addEventListener('click', (e) => {
+      const target = e.target;
+      if (target instanceof HTMLAnchorElement) return;
+      if (window.getSelection && String(window.getSelection()).length > 0) return;
+      input.focus();
+    });
+  }
+</script>
