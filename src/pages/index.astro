@@ -23,7 +23,7 @@ const experiences = (await getCollection('experience'))
   <TerminalHero lang={lang} />
   <Bio lang={lang} />
 
-  <section data-reveal class="mt-16 space-y-6">
+  <section id="education" data-reveal class="mt-16 space-y-6 scroll-mt-24">
     <h2 class="font-mono text-xs uppercase tracking-wider text-muted">{tt.education}</h2>
     <ul class="space-y-3 text-sm">
       {
@@ -40,7 +40,7 @@ const experiences = (await getCollection('experience'))
     </ul>
   </section>
 
-  <section data-reveal class="mt-16 space-y-6">
+  <section id="work" data-reveal class="mt-16 space-y-6 scroll-mt-24">
     <h2 class="font-mono text-xs uppercase tracking-wider text-muted">{tt.work}</h2>
     <div class="space-y-4">
       {
@@ -58,12 +58,12 @@ const experiences = (await getCollection('experience'))
     </div>
   </section>
 
-  <section data-reveal class="mt-16 space-y-6">
+  <section id="skills" data-reveal class="mt-16 space-y-6 scroll-mt-24">
     <h2 class="font-mono text-xs uppercase tracking-wider text-muted">{tt.skills}</h2>
     <TechSkills lang={lang} />
   </section>
 
-  <section data-reveal class="mt-16 space-y-6">
+  <section id="publications" data-reveal class="mt-16 space-y-6 scroll-mt-24">
     <div class="flex items-baseline justify-between">
       <h2 class="font-mono text-xs uppercase tracking-wider text-muted">{tt.publications}</h2>
       <a href={navHref(lang, 'writing')} class="font-mono text-xs text-muted hover:text-fg">
@@ -75,7 +75,7 @@ const experiences = (await getCollection('experience'))
     </div>
   </section>
 
-  <section data-reveal class="mt-16 space-y-6">
+  <section id="projects" data-reveal class="mt-16 space-y-6 scroll-mt-24">
     <h2 class="font-mono text-xs uppercase tracking-wider text-muted">{tt.projects}</h2>
     <div class="space-y-4">
       {projects[lang].map((p) => <ProjectCard project={p} />)}
