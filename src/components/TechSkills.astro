@@ -1,0 +1,33 @@
+---
+import { t, type Lang } from '../i18n';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const labels = t[lang].skillLabels;
+
+const groups: { key: keyof typeof labels; ids: string[] }[] = [
+{ key: 'Languages', ids: ['python', 'typescript', 'c', 'bash'] },
+  { key: 'Frameworks', ids: ['django', 'react', 'nextjs', 'nodejs'] },
+  { key: 'Cloud', ids: ['aws', 'gcp', 'azure'] },
+  { key: 'Tools', ids: ['postgres', 'redis', 'docker', 'terraform', 'git', 'githubactions'] },
+];
+---
+
+<section class="space-y-5">
+  {
+    groups.map((g) => (
+      <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+        <div class="font-mono text-xs text-muted w-28 shrink-0">{labels[g.key]}</div>
+        <img
+          src={`https://skillicons.dev/icons?i=${g.ids.join(',')}&theme=dark`}
+          alt={`${labels[g.key]} icons`}
+          class="h-10"
+          loading="lazy"
+        />
+      </div>
+    ))
+  }
+  <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+    <div class="font-mono text-xs text-muted w-28 shrink-0">{labels.Spoken}</div>
+    <div class="text-sm text-fg/85">{t[lang].spokenValue}</div>
+  </div>
+</section>

@@ -1,0 +1,54 @@
+---
+import type { Publication } from '../data/publications';
+
+interface Props {
+  pub: Publication;
+}
+const { pub } = Astro.props;
+
+// Source-specific styling: Zenn uses blue, Sansan Builders Box uses orange-ish.
+const sourceColor =
+  pub.source === 'Zenn'
+    ? 'text-sky-300 border-sky-300/30'
+    : pub.source === 'Sansan Builders Box'
+      ? 'text-orange-300 border-orange-300/30'
+      : 'text-fg/70 border-border';
+
+let host = '';
+try {
+  host = new URL(pub.url).hostname.replace(/^www\./, '');
+} catch {}
+---
+
+<a
+  href={pub.url}
+  rel="noopener noreferrer"
+  target="_blank"
+  class="block border border-border rounded-md p-5 hover:border-fg/40 transition-colors group"
+>
+  <div class="flex items-center gap-2 mb-2">
+    <span class={`font-mono text-[10px] uppercase tracking-wider border rounded px-1.5 py-0.5 ${sourceColor}`}>
+      {pub.source}
+    </span>
+    <span class="font-mono text-[10px] text-muted truncate">{host}</span>
+    <span class="ml-auto font-mono text-xs text-muted whitespace-nowrap">{pub.date}</span>
+  </div>
+
+  <h3 class={`text-base font-semibold text-fg group-hover:text-accent transition-colors leading-snug ${pub.summary ? 'mb-2' : 'mb-3'}`}>
+    {pub.title} <span class="text-xs font-normal opacity-60">↗</span>
+  </h3>
+
+  {pub.summary && <p class="text-fg/85 text-sm leading-relaxed mb-3">{pub.summary}</p>}
+
+  {
+    pub.tags.length > 0 && (
+      <div class="flex flex-wrap gap-1.5">
+        {pub.tags.map((tag) => (
+          <span class="font-mono text-[10px] text-muted border border-border rounded px-2 py-0.5">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )
+  }
+</a>

@@ -1,0 +1,76 @@
+---
+import { t, type Lang } from '../i18n';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const h = t[lang].hero;
+
+const contacts = [
+  {
+    label: 'email',
+    value: 'yuto.mitomi0213@gmail.com',
+    href: 'mailto:yuto.mitomi0213@gmail.com',
+  },
+  {
+    label: 'github',
+    value: 'github.com/Yuto729',
+    href: 'https://github.com/Yuto729',
+  },
+  {
+    label: 'linkedin',
+    value: 'linkedin.com/in/yuto-mitomi-5a92652b0',
+    href: 'https://www.linkedin.com/in/yuto-mitomi-5a92652b0',
+  },
+  {
+    label: 'zenn',
+    value: 'zenn.dev/techliberty',
+    href: 'https://zenn.dev/techliberty',
+  },
+  {
+    label: 'resume',
+    value: 'Google Drive',
+    href: 'https://drive.google.com/file/d/1CLe6qvLuT17xtVMWkgq-Rw-C004OXRfY/view',
+  },
+];
+---
+
+<section class="font-mono text-sm md:text-base leading-relaxed" data-reveal>
+  <div class="border border-border rounded-md bg-black/40 overflow-hidden">
+    <div class="flex gap-1.5 px-4 py-2 border-b border-border">
+      <span class="w-3 h-3 rounded-full bg-red-400/60"></span>
+      <span class="w-3 h-3 rounded-full bg-yellow-400/60"></span>
+      <span class="w-3 h-3 rounded-full bg-green-400/60"></span>
+      <span class="ml-2 text-xs text-muted">~ — zsh</span>
+    </div>
+    <div class="px-5 py-5 space-y-1">
+      <div>
+        <span class="text-accent">$</span> <span class="text-fg">{h.cmds[0]}</span>
+      </div>
+      <div class="text-fg/85 pl-4">{h.title}</div>
+
+      <div>
+        <span class="text-accent">$</span> <span class="text-fg">{h.cmds[1]}</span>
+      </div>
+      <div class="pl-4">
+        {
+          contacts.map((c) => (
+            <div class="flex gap-3">
+              <span class="text-muted shrink-0 w-20">{c.label}</span>
+              <a
+                href={c.href}
+                target={c.href.startsWith('mailto:') ? undefined : '_blank'}
+                rel={c.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+                class="text-fg hover:text-accent underline underline-offset-2 truncate"
+              >
+                {c.value}{c.href.startsWith('http') ? ' ↗' : ''}
+              </a>
+            </div>
+          ))
+        }
+      </div>
+
+      <div>
+        <span class="text-accent">$</span> <span class="cursor"></span>
+      </div>
+    </div>
+  </div>
+</section>

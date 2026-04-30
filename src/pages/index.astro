@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TerminalHero from '../components/TerminalHero.astro';
+import Bio from '../components/Bio.astro';
+import TechSkills from '../components/TechSkills.astro';
+import ExperienceCard from '../components/ExperienceCard.astro';
+import PublicationCard from '../components/PublicationCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+import { t, navHref } from '../i18n';
+import { publications } from '../data/publications';
+import { projects } from '../data/projects';
+
+const lang = 'en' as const;
+const tt = t[lang];
+
+const experiences = (await getCollection('experience'))
+  .filter((e) => e.slug.startsWith('en/'))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout lang={lang}>
+  <TerminalHero lang={lang} />
+  <Bio lang={lang} />
+
+  <section data-reveal class="mt-16 space-y-6">
+    <h2 class="font-mono text-xs uppercase tracking-wider text-muted">{tt.education}</h2>
+    <ul class="space-y-3 text-sm">
+      {
+        tt.universities.map((u) => (
+          <li class="flex justify-between gap-4">
+            <span>
+              <span class="text-fg">{u.name}</span>{' '}
+              <span class="text-muted">— {u.degree}</span>
+            </span>
+            <span class="font-mono text-muted text-xs whitespace-nowrap">{u.period}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section data-reveal class="mt-16 space-y-6">
+    <h2 class="font-mono text-xs uppercase tracking-wider text-muted">{tt.work}</h2>
+    <div class="space-y-4">
+      {
+        experiences.map((e) => (
+          <ExperienceCard
+            company={e.data.company}
+            role={e.data.role}
+            period={e.data.period}
+            summary={e.data.summary}
+            tags={e.data.tags}
+            links={e.data.links}
+          />
+        ))
+      }
+    </div>
+  </section>
+
+  <section data-reveal class="mt-16 space-y-6">
+    <h2 class="font-mono text-xs uppercase tracking-wider text-muted">{tt.skills}</h2>
+    <TechSkills lang={lang} />
+  </section>
+
+  <section data-reveal class="mt-16 space-y-6">
+    <div class="flex items-baseline justify-between">
+      <h2 class="font-mono text-xs uppercase tracking-wider text-muted">{tt.publications}</h2>
+      <a href={navHref(lang, 'writing')} class="font-mono text-xs text-muted hover:text-fg">
+        {tt.all}
+      </a>
+    </div>
+    <div class="space-y-4">
+      {publications[lang].slice(0, 3).map((p) => <PublicationCard pub={p} />)}
+    </div>
+  </section>
+
+  <section data-reveal class="mt-16 space-y-6">
+    <h2 class="font-mono text-xs uppercase tracking-wider text-muted">{tt.projects}</h2>
+    <div class="space-y-4">
+      {projects[lang].map((p) => <ProjectCard project={p} />)}
+    </div>
+  </section>
+</BaseLayout>
