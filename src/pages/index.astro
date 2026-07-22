@@ -21,64 +21,70 @@ const experiences = (await getCollection('experience'))
 
 <BaseLayout lang={lang}>
   <TerminalHero lang={lang} />
-  <Bio lang={lang} />
 
-  <section id="education" data-reveal class="mt-16 space-y-6 scroll-mt-24">
-    <h2 class="font-mono text-xs uppercase tracking-wider text-muted">{tt.education}</h2>
-    <ul class="space-y-3 text-sm">
+  <div class="markdown-body">
+    <Bio lang={lang} />
+
+    <section id="education" data-reveal>
+      <h2>{tt.education}</h2>
       {
         tt.universities.map((u) => (
-          <li class="flex justify-between gap-4">
-            <span>
-              <span class="text-fg">{u.name}</span>{' '}
-              <span class="text-muted">— {u.degree}</span>
-            </span>
-            <span class="font-mono text-muted text-xs whitespace-nowrap">{u.period}</span>
-          </li>
+          <p>
+            {u.name} — {u.degree} (<em>{u.period}</em>)
+          </p>
         ))
       }
-    </ul>
-  </section>
+    </section>
 
-  <section id="work" data-reveal class="mt-16 space-y-6 scroll-mt-24">
-    <h2 class="font-mono text-xs uppercase tracking-wider text-muted">{tt.work}</h2>
-    <div class="space-y-4">
+    <section id="work" data-reveal>
+      <h2>{tt.work}</h2>
       {
-        experiences.map((e) => (
-          <ExperienceCard
-            company={e.data.company}
-            role={e.data.role}
-            period={e.data.period}
-            summary={e.data.summary}
-            tags={e.data.tags}
-            links={e.data.links}
-          />
+        experiences.map((e, i) => (
+          <>
+            {i > 0 && <hr />}
+            <ExperienceCard
+              company={e.data.company}
+              role={e.data.role}
+              period={e.data.period}
+              summary={e.data.summary}
+              tags={e.data.tags}
+              links={e.data.links}
+            />
+          </>
         ))
       }
-    </div>
-  </section>
+    </section>
 
-  <section id="skills" data-reveal class="mt-16 space-y-6 scroll-mt-24">
-    <h2 class="font-mono text-xs uppercase tracking-wider text-muted">{tt.skills}</h2>
-    <TechSkills lang={lang} />
-  </section>
+    <section id="skills" data-reveal>
+      <h2>{tt.skills}</h2>
+      <TechSkills lang={lang} />
+    </section>
 
-  <section id="publications" data-reveal class="mt-16 space-y-6 scroll-mt-24">
-    <div class="flex items-baseline justify-between">
-      <h2 class="font-mono text-xs uppercase tracking-wider text-muted">{tt.publications}</h2>
-      <a href={navHref(lang, 'writing')} class="font-mono text-xs text-muted hover:text-fg">
-        {tt.all}
-      </a>
-    </div>
-    <div class="space-y-4">
-      {publications[lang].slice(0, 3).map((p) => <PublicationCard pub={p} />)}
-    </div>
-  </section>
+    <section id="publications" data-reveal>
+      <h2>{tt.publications}</h2>
+      <p>
+        <a href={navHref(lang, 'writing')}>{tt.all}</a>
+      </p>
+      {
+        publications[lang].slice(0, 3).map((p, i) => (
+          <>
+            {i > 0 && <hr />}
+            <PublicationCard pub={p} />
+          </>
+        ))
+      }
+    </section>
 
-  <section id="projects" data-reveal class="mt-16 space-y-6 scroll-mt-24">
-    <h2 class="font-mono text-xs uppercase tracking-wider text-muted">{tt.projects}</h2>
-    <div class="space-y-4">
-      {projects[lang].map((p) => <ProjectCard project={p} />)}
-    </div>
-  </section>
+    <section id="projects" data-reveal>
+      <h2>{tt.projects}</h2>
+      {
+        projects[lang].map((p, i) => (
+          <>
+            {i > 0 && <hr />}
+            <ProjectCard project={p} />
+          </>
+        ))
+      }
+    </section>
+  </div>
 </BaseLayout>

@@ -10,38 +10,36 @@ interface Props {
 const { company, role, period, summary, tags, links = [] } = Astro.props;
 ---
 
-<div class="border border-border rounded-md p-5">
-  <div class="flex items-baseline justify-between gap-4 mb-1">
-    <h3 class="text-lg font-semibold text-fg">{company}</h3>
-    <span class="font-mono text-xs text-muted whitespace-nowrap">{period}</span>
-  </div>
-  <div class="text-sm text-muted mb-3">{role}</div>
-  <p class="text-fg/85 text-sm leading-relaxed mb-4">{summary}</p>
+<div>
+  <h3>
+    {company} <em>— {role}</em>
+  </h3>
+  <p><strong>{period}</strong></p>
+  <p>{summary}</p>
   {
     tags.length > 0 && (
-      <div class="flex flex-wrap gap-1.5">
-        {tags.map((t) => (
-          <span class="font-mono text-[10px] text-muted border border-border rounded px-2 py-0.5">
-            {t}
-          </span>
+      <p>
+        {tags.map((t, i) => (
+          <>
+            {i > 0 && ' '}
+            <code>{t}</code>
+          </>
         ))}
-      </div>
+      </p>
     )
   }
   {
     links.length > 0 && (
-      <div class="flex flex-wrap gap-x-4 gap-y-1 mt-4 text-xs">
-        {links.map((l) => (
-          <a
-            href={l.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-accent underline underline-offset-2 hover:opacity-80"
-          >
-            {l.label} ↗
-          </a>
+      <p>
+        {links.map((l, i) => (
+          <>
+            {i > 0 && ' · '}
+            <a href={l.url} target="_blank" rel="noopener noreferrer">
+              {l.label} ↗
+            </a>
+          </>
         ))}
-      </div>
+      </p>
     )
   }
 </div>

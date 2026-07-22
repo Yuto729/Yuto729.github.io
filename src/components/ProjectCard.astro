@@ -7,34 +7,26 @@ interface Props {
 const { project } = Astro.props;
 ---
 
-<a
-  href={project.url}
-  rel="noopener noreferrer"
-  target="_blank"
-  class="block border border-border rounded-md p-5 hover:border-fg/40 transition-colors group"
->
-  <div class="flex items-center gap-2 mb-2">
-    <span class="font-mono text-[10px] uppercase tracking-wider border rounded px-1.5 py-0.5 text-emerald-300 border-emerald-300/30">
-      GitHub
-    </span>
-    <span class="font-mono text-[10px] text-muted">{project.language}</span>
-  </div>
-
-  <h3 class="text-base font-semibold text-fg group-hover:text-accent transition-colors mb-2 leading-snug">
-    {project.name} <span class="text-xs font-normal opacity-60">↗</span>
+<div>
+  <h3>
+    <a href={project.url} target="_blank" rel="noopener noreferrer">
+      {project.name} ↗
+    </a>
   </h3>
-
-  <p class="text-fg/85 text-sm leading-relaxed mb-3">{project.description}</p>
-
+  <p>
+    <strong>[GITHUB]</strong> {project.language}
+  </p>
+  <p>{project.description}</p>
   {
     project.tags.length > 0 && (
-      <div class="flex flex-wrap gap-1.5">
-        {project.tags.map((tag) => (
-          <span class="font-mono text-[10px] text-muted border border-border rounded px-2 py-0.5">
-            {tag}
-          </span>
+      <p>
+        {project.tags.map((tag, i) => (
+          <>
+            {i > 0 && ' '}
+            <code>{tag}</code>
+          </>
         ))}
-      </div>
+      </p>
     )
   }
-</a>
+</div>

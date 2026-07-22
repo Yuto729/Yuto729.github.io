@@ -4,15 +4,15 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
-        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        mono: ['"HackGen Console NF"', '"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+        sans: ['"HackGen Console NF"', '"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       colors: {
-        bg: '#0d0d0d',
-        fg: '#e6e6e6',
-        muted: '#8a8a8a',
-        accent: '#7dd3fc',
-        border: '#262626',
+        bg: '#0d1117',
+        fg: '#e6edf3',
+        muted: '#8b949e',
+        accent: '#58a6ff',
+        border: '#30363d',
       },
     },
   },

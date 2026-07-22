@@ -5,10 +5,6 @@ const { lang } = Astro.props;
 const paragraphs = t[lang].bio;
 ---
 
-<section class="mt-10 border-l-2 border-accent/60 pl-5 space-y-4" data-reveal>
-  {
-    paragraphs.map((p) => (
-      <p class="text-fg text-base leading-relaxed">{p}</p>
-    ))
-  }
+<section data-reveal>
+  {paragraphs.map((p) => <p>{p}</p>)}
 </section>

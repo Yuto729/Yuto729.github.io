@@ -10,20 +10,22 @@ const list = publications[lang];
 ---
 
 <BaseLayout title={`${tt.writingTitle} — Yuto Mitomi`} lang={lang}>
-  <h1 class="text-2xl font-semibold mb-2">{tt.writingTitle}</h1>
-  <p class="text-muted text-sm mb-10">
-    {tt.writingIntro}{' '}
-    <a href="https://zenn.dev/techliberty" class="text-accent underline underline-offset-2">
-      Zenn
-    </a>
-    {' '}and
-    {' '}
-    <a href="https://buildersbox.corp-sansan.com/" class="text-accent underline underline-offset-2">
-      Sansan Builders Box
-    </a>
-    .
-  </p>
-  <div class="space-y-4">
-    {list.map((p) => <div data-reveal><PublicationCard pub={p} /></div>)}
+  <div class="markdown-body">
+    <h1>{tt.writingTitle}</h1>
+    <p>
+      {tt.writingIntro}{' '}
+      <a href="https://zenn.dev/techliberty">Zenn</a> and{' '}
+      <a href="https://buildersbox.corp-sansan.com/">Sansan Builders Box</a>.
+    </p>
+    {
+      list.map((p, i) => (
+        <>
+          {i > 0 && <hr />}
+          <div data-reveal>
+            <PublicationCard pub={p} />
+          </div>
+        </>
+      ))
+    }
   </div>
 </BaseLayout>
