@@ -1,0 +1,18 @@
+<div>
+  <h3>
+    <a href={props.project.url} target="_blank" rel="noopener noreferrer">
+      {props.project.name} ↗
+    </a>
+  </h3>
+  <p>{props.project.description}</p>
+  {props.project.tags.length > 0 && (
+    <p>
+      {props.project.tags.map((tag, i) => (
+        <>
+          {i > 0 && ' '}
+          <code>{tag}</code>
+        </>
+      ))}
+    </p>
+  )}
+</div>

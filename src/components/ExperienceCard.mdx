@@ -1,0 +1,29 @@
+<div>
+  <h3>
+    {props.company} <em>— {props.role}</em>
+  </h3>
+  <p><strong>{props.period}</strong></p>
+  <p>{props.summary}</p>
+  {(props.tags ?? []).length > 0 && (
+    <p>
+      {props.tags.map((t, i) => (
+        <>
+          {i > 0 && ' '}
+          <code>{t}</code>
+        </>
+      ))}
+    </p>
+  )}
+  {(props.links ?? []).length > 0 && (
+    <p>
+      {props.links.map((l, i) => (
+        <>
+          {i > 0 && ' · '}
+          <a href={l.url} target="_blank" rel="noopener noreferrer">
+            {l.label} ↗
+          </a>
+        </>
+      ))}
+    </p>
+  )}
+</div>

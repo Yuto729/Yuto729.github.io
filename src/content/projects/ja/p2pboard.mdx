@@ -1,0 +1,9 @@
+---
+name: p2pboard
+url: https://github.com/Yuto729/p2pboard
+language: Go
+tags: [Go, P2P, CLI, UDP]
+order: 2
+---
+
+サーバーレスなP2Pホワイトボード／チャットCLI。同じLANやDockerネットワーク上のピアをUDPマルチキャストで自動発見し、以降は永続TCP接続でメッセージをやり取りする。人間はターミナルから、AIエージェントはJSONLの入出力インターフェースから同じルームに参加できる。socket/bind/setsockopt などを`golang.org/x/sys/unix`で直接扱う低レベル実装。

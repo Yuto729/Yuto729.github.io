@@ -1,0 +1,105 @@
+---
+---
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TerminalHero from '../../components/TerminalHero.mdx';
+import TechSkills from '../../components/TechSkills.mdx';
+import ExperienceCard from '../../components/ExperienceCard.mdx';
+import PublicationCard from '../../components/PublicationCard.mdx';
+import ProjectCard from '../../components/ProjectCard.mdx';
+import { getCollection } from 'astro:content';
+import { publications } from '../../data/publications';
+
+export const experiences = (await getCollection('experience'))
+  .filter((e) => e.slug.startsWith('en/'))
+  .sort((a, b) => a.data.order - b.data.order);
+
+export const projectEntries = (await getCollection('projects'))
+  .filter((e) => e.slug.startsWith('en/'))
+  .sort((a, b) => a.data.order - b.data.order);
+
+<BaseLayout lang="en">
+
+<TerminalHero lang="en" />
+
+<div class="markdown-body">
+
+<section data-reveal>
+
+I'm drawn to products that improve how people work, and to products that can become infrastructure for society. If people can spend their time on meaningful, interesting work and have their individual capabilities empowered, I think more of us will actually enjoy working.
+
+At the same time, I'm fascinated by how technology has historically rewritten how society itself works — payment infrastructure, Web3, generative AI — and I want to keep working on the side that treats technology not as a mere tool but as a force that reshapes society.
+
+</section>
+
+<section id="education" data-reveal>
+
+<h2 id="education">Education</h2>
+
+The University of Tokyo — M.Eng. in Precision Engineering (<em>Apr. 2026 – Mar. 2028</em>)
+
+The University of Tokyo — B.Eng. in Precision Engineering (<em>Apr. 2022 – Mar. 2026</em>)
+
+</section>
+
+<section id="work" data-reveal>
+
+<h2 id="work">Work Experience</h2>
+
+{experiences.map((e, i) => (
+  <>
+    {i > 0 && <hr />}
+    <ExperienceCard
+      company={e.data.company}
+      role={e.data.role}
+      period={e.data.period}
+      summary={e.data.summary}
+      tags={e.data.tags}
+      links={e.data.links}
+    />
+  </>
+))}
+
+</section>
+
+<section id="skills" data-reveal>
+
+<h2 id="skills">Tech Skills</h2>
+
+<TechSkills lang="en" />
+
+</section>
+
+<section id="publications" data-reveal>
+
+<h2 id="publications">Publications</h2>
+
+[all →](/en/writing/)
+
+{publications.en.slice(0, 3).map((p, i) => (
+  <>
+    {i > 0 && <hr />}
+    <PublicationCard pub={p} />
+  </>
+))}
+
+</section>
+
+<section id="projects" data-reveal>
+
+<h2 id="projects">Personal Projects</h2>
+
+[all →](/en/projects/)
+
+{projectEntries.slice(0, 3).map((e, i) => (
+  <>
+    {i > 0 && <hr />}
+    <ProjectCard project={{ ...e.data, description: e.body?.trim() }} />
+  </>
+))}
+
+</section>
+
+</div>
+
+</BaseLayout>

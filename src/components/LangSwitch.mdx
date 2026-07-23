@@ -1,0 +1,9 @@
+import { altLangPath, t } from '../i18n';
+
+<a
+  href={altLangPath(props.pathname, props.lang)}
+  class="font-mono text-xs text-muted hover:text-fg transition-colors border border-border rounded px-2 py-1"
+  aria-label={`Switch to ${t[props.lang].langSwitchTo}`}
+>
+  {t[props.lang].langSwitchTo}
+</a>

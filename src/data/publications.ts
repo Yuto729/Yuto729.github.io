@@ -1,3 +1,5 @@
+import { getCollection } from 'astro:content';
+
 export interface Publication {
   title: string;
   summary?: string;
@@ -42,42 +44,31 @@ async function fetchZennArticles(username: string): Promise<Publication[]> {
   }
 }
 
-// --- Manually maintained entries (non-Zenn sources) -----------------
+// --- Manually maintained entries (non-Zenn sources), authored as Markdown ---
 
-const sansanEn: Publication[] = [
-  {
-    title:
-      'Redesigning the async fan-out infrastructure for Sansan Bizcard Maker',
-    summary:
-      'How we replaced a Cloud Tasks-only design with a Pub/Sub × Cloud Tasks BufferTask hybrid to handle 3,000+ card bulk distributions without dead-letter failures.',
-    url: 'https://buildersbox.corp-sansan.com/entry/2026/03/31/100000',
-    source: 'Sansan Builders Box',
-    date: '2026-03-31',
-    tags: ['GCP', 'Pub/Sub', 'Cloud Tasks', 'Async'],
-  },
-];
-
-const sansanJa: Publication[] = [
-  {
-    title: '名刺メーカーの非同期連携基盤の再設計',
-    summary:
-      '3,000件規模の一括支給で詰まっていた Cloud Tasks 統一案を、Pub/Sub × Cloud Tasks BufferTask のハイブリッド構成に再設計し、デッドレターと手動リカバリ運用を解消した話。',
-    url: 'https://buildersbox.corp-sansan.com/entry/2026/03/31/100000',
-    source: 'Sansan Builders Box',
-    date: '2026-03-31',
-    tags: ['GCP', 'Pub/Sub', 'Cloud Tasks', '非同期処理'],
-  },
-];
+async function loadManualEntries(lang: 'en' | 'ja'): Promise<Publication[]> {
+  const entries = await getCollection('publications', (e) => e.slug.startsWith(`${lang}/`));
+  return entries.map((e) => ({
+    title: e.data.title,
+    summary: e.body?.trim(),
+    url: e.data.url,
+    source: e.data.source,
+    date: e.data.date,
+    tags: e.data.tags,
+  }));
+}
 
 // --- Compose -----------------------------------------------------------
 
 const zennArticles = await fetchZennArticles(ZENN_USERNAME);
+const manualEn = await loadManualEntries('en');
+const manualJa = await loadManualEntries('ja');
 
 function sortByDateDesc(list: Publication[]): Publication[] {
   return [...list].sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
 export const publications: Record<'en' | 'ja', Publication[]> = {
-  en: sortByDateDesc([...zennArticles, ...sansanEn]),
-  ja: sortByDateDesc([...zennArticles, ...sansanJa]),
+  en: sortByDateDesc([...zennArticles, ...manualEn]),
+  ja: sortByDateDesc([...zennArticles, ...manualJa]),
 };

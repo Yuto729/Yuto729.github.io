@@ -1,0 +1,33 @@
+---
+---
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PublicationCard from '../components/PublicationCard.mdx';
+import { publications } from '../data/publications';
+
+export const list = publications.ja;
+
+<BaseLayout title="Writing — 三富 佑人" lang="ja">
+
+<div class="markdown-body">
+
+# Writing
+
+主に
+<a href="https://zenn.dev/techliberty">Zenn</a>
+と
+<a href="https://buildersbox.corp-sansan.com/">Sansan Builders Box</a>
+に投稿した技術記事・論文解説。
+
+{list.map((p, i) => (
+  <>
+    {i > 0 && <hr />}
+    <div data-reveal>
+      <PublicationCard pub={p} />
+    </div>
+  </>
+))}
+
+</div>
+
+</BaseLayout>

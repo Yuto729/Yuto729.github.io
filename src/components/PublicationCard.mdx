@@ -1,0 +1,21 @@
+<div>
+  <h3>
+    <a href={props.pub.url} target="_blank" rel="noopener noreferrer">
+      {props.pub.title} ↗
+    </a>
+  </h3>
+  <p>
+    <strong>[{props.pub.source}]</strong> {props.pub.date}
+  </p>
+  {props.pub.summary && <p>{props.pub.summary}</p>}
+  {props.pub.tags.length > 0 && (
+    <p>
+      {props.pub.tags.map((tag, i) => (
+        <>
+          {i > 0 && ' '}
+          <code>{tag}</code>
+        </>
+      ))}
+    </p>
+  )}
+</div>

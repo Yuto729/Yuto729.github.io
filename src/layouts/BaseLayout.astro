@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import LangSwitch from '../components/LangSwitch.astro';
+import LangSwitch from '../components/LangSwitch.mdx';
 import { t, navHref, type Lang } from '../i18n';
 
 interface Props {
@@ -42,7 +42,7 @@ const pageDesc = description ?? defaultDesc;
             <a href={navHref(lang, 'overview')} class="hover:text-fg transition-colors">{tt.nav.overview}</a>
             <a href={navHref(lang, 'writing')} class="hover:text-fg transition-colors">{tt.nav.writing}</a>
           </nav>
-          <LangSwitch lang={lang} />
+          <LangSwitch lang={lang} pathname={Astro.url.pathname} />
         </div>
       </header>
       <main>

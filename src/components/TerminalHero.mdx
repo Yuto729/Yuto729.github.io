@@ -1,11 +1,6 @@
----
-import { t, type Lang } from '../i18n';
-interface Props { lang: Lang; }
-const { lang } = Astro.props;
-const h = t[lang].hero;
-const bio = t[lang].bio;
+import { t } from '../i18n';
 
-const contacts = [
+export const contacts = [
   {
     label: 'email',
     value: 'yuto.mitomi0213@gmail.com',
@@ -33,69 +28,9 @@ const contacts = [
   },
 ];
 
-const sections = ['education', 'work', 'skills', 'publications', 'projects', 'writing'];
-const hint = lang === 'ja' ? "'help' と入力してコマンド一覧を表示" : "type 'help' to see available commands";
----
+export const sections = ['education', 'work', 'skills', 'publications', 'projects', 'writing'];
 
-<section class="font-mono text-sm md:text-base leading-relaxed" data-reveal>
-  <div id="terminal-body" class="border border-border rounded-sm bg-black/40 overflow-hidden cursor-text">
-    <div class="flex gap-1.5 px-4 py-2 border-b border-border">
-      <span class="w-3 h-3 rounded-full bg-red-400/60"></span>
-      <span class="w-3 h-3 rounded-full bg-yellow-400/60"></span>
-      <span class="w-3 h-3 rounded-full bg-green-400/60"></span>
-      <span class="ml-2 text-xs text-muted">~ — zsh</span>
-    </div>
-    <div class="px-5 py-5 space-y-1">
-      <div id="terminal-output" class="space-y-1">
-        <div>
-          <span class="text-accent">$</span> <span class="text-fg">{h.cmds[0]}</span>
-        </div>
-        <div class="text-fg/85 pl-4">{h.title}</div>
-
-        <div>
-          <span class="text-accent">$</span> <span class="text-fg">{h.cmds[1]}</span>
-        </div>
-        <div class="pl-4">
-          {
-            contacts.map((c) => (
-              <div class="flex gap-3">
-                <span class="text-muted shrink-0 w-20">{c.label}</span>
-                <a
-                  href={c.href}
-                  target={c.href.startsWith('mailto:') ? undefined : '_blank'}
-                  rel={c.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
-                  class="text-fg hover:text-accent underline underline-offset-2 truncate"
-                >
-                  {c.value}{c.href.startsWith('http') ? ' ↗' : ''}
-                </a>
-              </div>
-            ))
-          }
-        </div>
-
-        <div class="text-muted text-xs pt-2">{hint}</div>
-      </div>
-
-      <form id="terminal-form" autocomplete="off" class="flex items-center gap-2">
-        <span class="text-accent shrink-0">$</span>
-        <input
-          id="terminal-input"
-          type="text"
-          spellcheck="false"
-          autocapitalize="off"
-          autocorrect="off"
-          aria-label="terminal input"
-          class="flex-1 bg-transparent text-fg outline-none border-none font-mono caret-accent"
-        />
-      </form>
-      <noscript>
-        <div><span class="text-accent">$</span> <span class="cursor"></span></div>
-      </noscript>
-    </div>
-  </div>
-</section>
-
-<script define:vars={{ contacts, bio, heroTitle: h.title, sections, lang }}>
+export function initTerminal({ contacts, bio, heroTitle, sections, lang }) {
   const output = document.getElementById('terminal-output');
   const input = document.getElementById('terminal-input');
   const form = document.getElementById('terminal-form');
@@ -230,12 +165,10 @@ const hint = lang === 'ja' ? "'help' と入力してコマンド一覧を表示"
       const before = value.slice(0, cursorPos);
       const after = value.slice(cursorPos);
 
-      // Find the start of the current token (last whitespace-separated word before cursor)
       const m = before.match(/(\S*)$/);
       const token = m ? m[1] : '';
       const tokenStart = cursorPos - token.length;
 
-      // What are we completing? Command (no leading non-space content), or arg (cmd has been typed)?
       const head = before.slice(0, tokenStart).trim();
       const candidates = head === '' ? allCommands : completionsFor[head.split(/\s+/)[0]];
       if (!candidates) return;
@@ -261,7 +194,6 @@ const hint = lang === 'ja' ? "'help' と入力してコマンド一覧を表示"
         return;
       }
 
-      // Multiple matches with no further common prefix: list them as a hint
       printPrompt(value);
       print(matches.join('  '));
     };
@@ -287,7 +219,6 @@ const hint = lang === 'ja' ? "'help' と入力してコマンド一覧を表示"
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      // Skip if user is mid-IME-composition (e.g. converting Japanese kanji)
       if (isComposing) return;
       run(input.value);
       input.value = '';
@@ -328,4 +259,70 @@ const hint = lang === 'ja' ? "'help' と入力してコマンド一覧を表示"
       input.focus();
     });
   }
-</script>
+}
+
+<section class="font-mono text-sm md:text-base leading-relaxed" data-reveal>
+  <div id="terminal-body" class="border border-border rounded-sm bg-black/40 overflow-hidden cursor-text">
+    <div class="flex gap-1.5 px-4 py-2 border-b border-border">
+      <span class="w-3 h-3 rounded-full bg-red-400/60"></span>
+      <span class="w-3 h-3 rounded-full bg-yellow-400/60"></span>
+      <span class="w-3 h-3 rounded-full bg-green-400/60"></span>
+      <span class="ml-2 text-xs text-muted">~ — zsh</span>
+    </div>
+    <div class="px-5 py-5 space-y-1">
+      <div id="terminal-output" class="space-y-1">
+        <div>
+          <span class="text-accent">$</span> <span class="text-fg">{t[props.lang].hero.cmds[0]}</span>
+        </div>
+        <div class="text-fg/85 pl-4">{t[props.lang].hero.title}</div>
+
+        <div>
+          <span class="text-accent">$</span> <span class="text-fg">{t[props.lang].hero.cmds[1]}</span>
+        </div>
+        <div class="pl-4">
+          {contacts.map((c) => (
+            <div class="flex gap-3">
+              <span class="text-muted shrink-0 w-20">{c.label}</span>
+              <a
+                href={c.href}
+                target={c.href.startsWith('mailto:') ? undefined : '_blank'}
+                rel={c.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+                class="text-fg hover:text-accent underline underline-offset-2 truncate"
+              >
+                {c.value}{c.href.startsWith('http') ? ' ↗' : ''}
+              </a>
+            </div>
+          ))}
+        </div>
+
+        <div class="text-muted text-xs pt-2">
+          {props.lang === 'ja' ? "'help' と入力してコマンド一覧を表示" : "type 'help' to see available commands"}
+        </div>
+      </div>
+
+      <form id="terminal-form" autocomplete="off" class="flex items-center gap-2">
+        <span class="text-accent shrink-0">$</span>
+        <input
+          id="terminal-input"
+          type="text"
+          spellcheck="false"
+          autocapitalize="off"
+          autocorrect="off"
+          aria-label="terminal input"
+          class="flex-1 bg-transparent text-fg outline-none border-none font-mono caret-accent"
+        />
+      </form>
+      <noscript>
+        <div><span class="text-accent">$</span> <span class="cursor"></span></div>
+      </noscript>
+    </div>
+  </div>
+</section>
+
+<script>{`(${initTerminal.toString()})(${JSON.stringify({
+  contacts,
+  bio: t[props.lang].bio,
+  heroTitle: t[props.lang].hero.title,
+  sections,
+  lang: props.lang,
+})});`}</script>

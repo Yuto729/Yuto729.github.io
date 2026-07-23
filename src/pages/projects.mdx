@@ -1,0 +1,29 @@
+---
+---
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.mdx';
+import { getCollection } from 'astro:content';
+
+export const projectEntries = (await getCollection('projects'))
+  .filter((e) => e.slug.startsWith('ja/'))
+  .sort((a, b) => a.data.order - b.data.order);
+
+<BaseLayout title="Personal Projects — 三富 佑人" lang="ja">
+
+<div class="markdown-body">
+
+# Personal Projects
+
+{projectEntries.map((e, i) => (
+  <>
+    {i > 0 && <hr />}
+    <div data-reveal>
+      <ProjectCard project={{ ...e.data, description: e.body?.trim() }} />
+    </div>
+  </>
+))}
+
+</div>
+
+</BaseLayout>

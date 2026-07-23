@@ -1,0 +1,9 @@
+---
+name: p2pboard
+url: https://github.com/Yuto729/p2pboard
+language: Go
+tags: [Go, P2P, CLI, UDP]
+order: 2
+---
+
+A serverless P2P whiteboard / chat CLI that runs over a local LAN or a Docker network. Peers in the same room discover each other automatically via UDP multicast, and messages are delivered over persistent TCP connections. Humans use it from a terminal; AI agents join the same room through a JSONL input/output interface. Low-level socket / bind / setsockopt handling written directly with `golang.org/x/sys/unix`.

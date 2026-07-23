@@ -1,0 +1,22 @@
+import { getEntry } from 'astro:content';
+
+export const entryJa = await getEntry('skills', 'ja');
+export const entryEn = await getEntry('skills', 'en');
+export const bySlug = { ja: entryJa, en: entryEn };
+
+<ul>
+  {bySlug[props.lang].data.groups.map((g) => (
+    <li>
+      <strong>{g.label}:</strong>
+      <br />
+      <img
+        src={`https://skillicons.dev/icons?i=${g.ids.join(',')}&theme=dark`}
+        alt={`${g.label} icons`}
+        loading="lazy"
+      />
+    </li>
+  ))}
+  <li>
+    <strong>{bySlug[props.lang].data.spokenLabel}:</strong> {bySlug[props.lang].data.spokenValue}
+  </li>
+</ul>
