@@ -1,0 +1,26 @@
+---
+// 広い画面でだけ、本文カラムの左の余白にセクションへのリンクを固定表示する
+const items = [
+  { id: 'education', label: 'Education' },
+  { id: 'work', label: 'Work Experience' },
+  { id: 'skills', label: 'Tech Skills' },
+  { id: 'publications', label: 'Publications' },
+  { id: 'projects', label: 'Personal Projects' },
+];
+---
+
+<nav
+  aria-label="Sections"
+  class="hidden min-[1240px]:block fixed top-40 font-mono text-xs text-muted"
+  style="right: calc(50% + 28rem + 1.5rem)"
+>
+  <ul class="space-y-2 border-l border-border">
+    {items.map((item) => (
+      <li>
+        <a href={`#${item.id}`} class="block -ml-px pl-3 border-l border-transparent hover:text-fg hover:border-accent transition-colors">
+          {item.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>

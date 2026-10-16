@@ -27,6 +27,7 @@
 }
 
 html {
+  scroll-behavior: smooth;
   background-color: #0d1117;
   color: #e6edf3;
   font-family: 'HackGen Console NF', 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
@@ -34,6 +35,17 @@ html {
 
 body {
   min-height: 100vh;
+}
+
+/* 左メニューから飛んだとき見出しが画面端に張り付かないようにする */
+section[id] {
+  scroll-margin-top: 2rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 /* Markdown content styling for experience pages */

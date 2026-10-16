@@ -3,6 +3,7 @@
 
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TerminalHero from '../../components/TerminalHero.mdx';
+import SectionNav from '../../components/SectionNav.astro';
 import TechSkills from '../../components/TechSkills.mdx';
 import ExperienceCard from '../../components/ExperienceCard.mdx';
 import PublicationCard from '../../components/PublicationCard.mdx';
@@ -19,6 +20,8 @@ export const projectEntries = (await getCollection('projects'))
   .sort((a, b) => a.data.order - b.data.order);
 
 <BaseLayout lang="en">
+
+<SectionNav />
 
 <TerminalHero lang="en" />
 
