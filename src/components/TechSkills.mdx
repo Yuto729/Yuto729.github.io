@@ -10,9 +10,12 @@ export const bySlug = { ja: entryJa, en: entryEn };
       <strong>{g.label}:</strong>
       <br />
       <img
-        src={`https://skillicons.dev/icons?i=${g.ids.join(',')}&theme=dark`}
+        src={`/skills/${g.ids.join('-')}.svg`}
         alt={`${g.label} icons`}
+        width={Math.round(((g.ids.length * 300 - 44) * 48) / 256)}
+        height="48"
         loading="lazy"
+        decoding="async"
       />
     </li>
   ))}

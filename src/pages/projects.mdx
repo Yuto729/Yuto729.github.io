@@ -18,7 +18,7 @@ export const projectEntries = (await getCollection('projects'))
 {projectEntries.map((e, i) => (
   <>
     {i > 0 && <hr />}
-    <div data-reveal>
+    <div>
       <ProjectCard project={{ ...e.data, description: e.body?.trim() }} />
     </div>
   </>
