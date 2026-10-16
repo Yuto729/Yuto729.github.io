@@ -7,10 +7,10 @@ import { PurgeCSS } from 'purgecss';
 const DIST = new URL('../dist/', import.meta.url).pathname;
 const STYLE_RE = /<style>([\s\S]*?)<\/style>/g;
 
-// Tailwind の `text-fg/85` や `md:py-20` を1トークンとして拾う。
+// Tailwind の `text-fg/85` や `md:py-20`、`grid-cols-[16rem_minmax(0,1fr)]` を1トークンとして拾う。
 // `<hr/>` の `hr/` のように `/` で区切られた部分も別トークンとして加える。
 const extractor = (content) => {
-  const tokens = content.match(/[\w\-/:.%[\]]+(?<!:)/g) || [];
+  const tokens = content.match(/[\w\-/:.%[\](),]+(?<!:)/g) || [];
   return [...tokens, ...tokens.flatMap((t) => t.split('/'))];
 };
 

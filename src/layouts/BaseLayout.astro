@@ -20,6 +20,8 @@ const defaultDesc =
 
 const pageTitle = title ?? defaultTitle;
 const pageDesc = description ?? defaultDesc;
+// 広い画面では sidebar スロットを左カラムに置き、本文と2カラムにする
+const hasSidebar = Astro.slots.has('sidebar');
 ---
 
 <!doctype html>
@@ -35,7 +37,20 @@ const pageDesc = description ?? defaultDesc;
     <title>{pageTitle}</title>
   </head>
   <body class="bg-bg text-fg font-sans">
-    <div class="max-w-4xl mx-auto px-6 py-12 md:py-20">
+    <div
+      class:list={[
+        'max-w-4xl mx-auto px-6 py-12 md:py-20',
+        hasSidebar && 'min-[1240px]:max-w-[76rem] min-[1240px]:grid min-[1240px]:grid-cols-[16rem_minmax(0,1fr)] min-[1240px]:gap-12',
+      ]}
+    >
+      {hasSidebar && (
+        <aside class="hidden min-[1240px]:block">
+          <div class="sticky top-12 pt-[4.75rem]">
+            <slot name="sidebar" />
+          </div>
+        </aside>
+      )}
+      <div class="min-w-0">
       <header class="mb-12 flex items-center justify-between gap-4 font-mono text-sm text-muted">
         <a href={navHref(lang, 'overview')} class="hover:text-fg transition-colors">~/</a>
         <div class="flex items-center gap-5">
@@ -52,6 +67,7 @@ const pageDesc = description ?? defaultDesc;
       <footer class="mt-24 pt-8 border-t border-border font-mono text-xs text-muted">
         <span>© {new Date().getFullYear()} {lang === 'ja' ? '三富 佑人' : 'Yuto Mitomi'}</span>
       </footer>
+      </div>
     </div>
 
     <script type="speculationrules" set:html={JSON.stringify({
